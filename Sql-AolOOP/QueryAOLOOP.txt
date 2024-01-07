@@ -1,0 +1,96 @@
+CREATE DATABASE AolOOP
+USE AolOOP
+
+CREATE TABLE MsTable(
+    TipeMeja VARCHAR(15) NOT NULL,
+    KapasitasMeja INTEGER NOT NULL,
+    PRIMARY KEY (TipeMeja)
+);
+
+CREATE TABLE MenuLokal(
+    IDMenuLokal CHAR(5) NOT NULL,
+    LokasiLokal VARCHAR(50) NOT NULL,
+    PRIMARY KEY (IDMenuLokal)
+);
+
+CREATE TABLE MenuSpesial(
+    IDSpesial CHAR(5) NOT NULL,
+    PRIMARY KEY (IDSpesial),
+    LokasiSpesial VARCHAR(50) NOT NULL,
+    Narasi VARCHAR(200)
+);
+
+CREATE TABLE Lokasi(
+    NamaKota VARCHAR(50) NOT NULL,
+    PRIMARY KEY (NamaKota)
+);
+
+CREATE TABLE MsEmployee(
+    EmployeeID CHAR(5) NOT NULL,
+    EmployeeNama VARCHAR(100) NOT NULL,
+    EmployeeLokasi VARCHAR(50) NOT NULL,
+    PRIMARY KEY (EmployeeID),
+    FOREIGN KEY (EmployeeLokasi) REFERENCES Lokasi(NamaKota) ON DELETE CASCADE 
+);
+
+CREATE TABLE MsMenu(
+    MenuID CHAR(5) NOT NULL PRIMARY KEY,
+    MenuNama VARCHAR(100),
+    MenuHarga INTEGER,
+    IDMenuLokal CHAR(5),
+    IDSpesial CHAR(5),
+    FOREIGN KEY (IDMenuLokal) REFERENCES MenuLokal(IDMenuLokal) ON DELETE CASCADE,
+    FOREIGN KEY (IDSpesial) REFERENCES MenuSpesial(IDSpesial) ON DELETE CASCADE
+);
+
+CREATE TABLE MsReserve(
+    IDReserve CHAR(5) NOT NULL,
+    NamaPemesan VARCHAR(50) NOT NULL,
+    LokasiReservasi VARCHAR(50) NOT NULL,
+    JumlahMejaPesanan INTEGER NOT NULL,
+    TipeMeja VARCHAR(10) NOT NULL,
+    JumlahOrangPerMeja INTEGER NOT NULL CHECK (JumlahOrangPerMeja < TipeMeja),
+    StatusMeja VARCHAR(50) NOT NULL CHECK (StatusMeja IN ("In Reserve", "In Order", "Finalized")),
+    PRIMARY KEY (IDReserve),
+    FOREIGN KEY (TipeMeja) REFERENCES MsTable(TipeMeja) ON DELETE CASCADE,
+    FOREIGN KEY (LokasiReservasi) REFERENCES Lokasi(NamaKota) ON DELETE CASCADE
+);
+
+CREATE TABLE StInOrder(
+    IDInOrder CHAR(5),
+    MenuID CHAR(5),
+    IDMenuLokal CHAR(5),
+    IDSpesial CHAR(5),
+    IDReserve CHAR(5),
+    PRIMARY KEY (IDInOrder),
+    FOREIGN KEY (IDReserve) REFERENCES MsReserve(IDReserve) ON DELETE CASCADE,
+    FOREIGN KEY (MenuID) REFERENCES MsMenu(MenuID) ON DELETE CASCADE,
+    FOREIGN KEY (IDMenuLokal) REFERENCES MenuLokal(IDMenuLokal) ON DELETE CASCADE,
+    FOREIGN KEY (IDSpesial) REFERENCES MenuSpesial(IDSpesial) ON DELETE CASCADE
+);
+
+CREATE TABLE StFinal(
+    IDFinal CHAR(5),
+    MenuID CHAR(5),
+    IDMenuLokal CHAR(5),
+    IDSpesial CHAR(5),
+    IDReserve CHAR(5),
+    PRIMARY KEY (IDFinal),
+    FOREIGN KEY (IDReserve) REFERENCES MsReserve(IDReserve) ON DELETE CASCADE,
+    FOREIGN KEY (MenuID) REFERENCES MsMenu(MenuID) ON DELETE CASCADE,
+    FOREIGN KEY (IDMenuLokal) REFERENCES MenuLokal(IDMenuLokal) ON DELETE CASCADE,
+    FOREIGN KEY (IDSpesial) REFERENCES MenuSpesial(IDSpesial) ON DELETE CASCADE
+);
+
+INSERT INTO MsTable VALUES
+('Romantic', 2),
+('General', 4),
+('Family', 10);
+
+INSERT INTO Lokasi VALUES
+("Bandung"),
+("Jakarta"),
+("Padang"),
+("Bali"),
+("Samarinda"),
+("Surabaya");
