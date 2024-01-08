@@ -1,6 +1,6 @@
 
 public class Employee {
-	String id, name;
+	String id, name, location;
 	Restaurant restaurant;
 	public Employee(String id, String name) {
 		super();
