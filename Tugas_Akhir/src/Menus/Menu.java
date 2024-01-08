@@ -1,4 +1,3 @@
-package Menus;
 
 public class Menu {
 	static String id;

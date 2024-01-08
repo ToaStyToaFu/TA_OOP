@@ -1,4 +1,3 @@
-package Menus;
 
 public class SpecialMenu extends Menu{
 
@@ -8,4 +7,11 @@ public class SpecialMenu extends Menu{
 		super(id, nama, type, harga);
 		this.desc = desc;
 	}
+	
+	public void viewSpecialMenu() {
+		for (int i = 0; i < Menu.size(); i++) {
+			System.out.println(i+1 + ". " + Menu.id + " | " + Menu.nama + " | " + Menu.harga + " | " + desc + " |");
+		}
+	}
+	
 }
